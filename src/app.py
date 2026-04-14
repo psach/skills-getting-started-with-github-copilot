@@ -5,6 +5,8 @@ A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
 
+import email
+
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -38,6 +40,42 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Soccer Team": {
+        "description": "Train for competitive soccer matches and teamwork",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["alex@mergington.edu", "karen@mergington.edu"]
+    },
+    "Swimming Club": {
+        "description": "Develop swim skills and prepare for swim meets",
+        "schedule": "Mondays and Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 15,
+        "participants": ["nina@mergington.edu", "dylan@mergington.edu"]
+    },
+    "Art Workshop": {
+        "description": "Explore painting, drawing, and mixed media projects",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 16,
+        "participants": ["lily@mergington.edu", "maria@mergington.edu"]
+    },
+    "Photography Club": {
+        "description": "Learn photography techniques and document school events",
+        "schedule": "Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 14,
+        "participants": ["simon@mergington.edu", "ella@mergington.edu"]
+    },
+    "Debate Team": {
+        "description": "Practice public speaking, research, and competitive debate",
+        "schedule": "Mondays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 12,
+        "participants": ["jordan@mergington.edu", "nathan@mergington.edu"]
+    },
+    "Math Olympiad": {
+        "description": "Solve challenging math problems and prepare for competitions",
+        "schedule": "Tuesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 12,
+        "participants": ["zoe@mergington.edu", "owen@mergington.edu"]
     }
 }
 
@@ -61,6 +99,11 @@ def signup_for_activity(activity_name: str, email: str):
 
     # Get the specific activity
     activity = activities[activity_name]
+
+#Validate student is not already signed up 
+   if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student is already signed up for this activity")
+
 
     # Add student
     activity["participants"].append(email)
